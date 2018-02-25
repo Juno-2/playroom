@@ -1,4 +1,5 @@
-# USDTペア
+###  SymbolUSDT.py
+###  USDTペア
 
 btc = 'BTCUSDT'
 eth = 'ETHUSDT'

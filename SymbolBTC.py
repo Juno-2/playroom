@@ -1,4 +1,6 @@
-# BTCペア
+### SymbolBTC.py
+### BTCペア
+
 ada = 'ADABTC'
 adx = 'ADXBTC'
 ae = 'AEBTC'

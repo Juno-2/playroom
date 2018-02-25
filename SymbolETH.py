@@ -1,4 +1,5 @@
-# ETHペア
+###  SymbolETH.py
+###  ETHペア
 
 ada = 'ADAETH'
 adx = 'ADXETH'
