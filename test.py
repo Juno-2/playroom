@@ -1,7 +1,10 @@
 #　必要モジュール
 from binance.client import Client
-#
-from Key import *
+#  認証
+from Keys import *
+#  描画
+import pandas as pd
+import matplotlib.pyplot as plt
 #　取得間隔モジュール
 from Interval import *
 #  BTCペア
