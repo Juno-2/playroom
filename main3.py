@@ -14,6 +14,9 @@ import drawchart as dc
 from datetime import datetime,timedelta
 #　取得間隔モジュール
 from Interval import *
+
+#  データ取得
+import getData as gd
 #  BTCペア
 import SymbolBTC as bt
 #  ETHペア
@@ -21,17 +24,18 @@ import SymbolETH as et
 #  USDTペア
 import SymbolUSDT as us
 
-#  認証
-client = Client(api_key,api_secret)
 #  ろうそく足
 Open = np.array([])  # 始値
-Close = np.array([]) # 終値
 High = np.array([])  # 高値
 Low = np.array([])   # 低値
+Close = np.array([]) # 終値
+Candle = [Open,High,Low,Close] #ろうそく足
+
+
+time = np.array([])
 
 #  現在時刻取得
 #Now = datetime.now().strftime("%m/%d %H:%M:%S")
-Now = datetime.now()
 
 time = np.array([])
 count = 0
@@ -44,26 +48,14 @@ boll = np.array([])
 upper_band = np.array([])
 lower_band = np.array([])
 
+#  データ取得
+gd.Klines(Candle,time,bt.eth,fiveMin,"2 day ago UTC")
+#  4値格納
+Open = np.append(Open,Candle[0])
+High = np.append(High,Candle[1])
+Low = np.append(Low,Candle[2])
+Close = np.append(Close,Candle[3])
 
-#  add data
-klines = client.get_historical_klines(bt.eth,fiveMin,"2 day ago UTC")
-for index, item in enumerate(klines):
-    #  始値
-    Open = np.append(Open,float(klines[index][1]))
-    #print(Open[index])
-    #  高値
-    High = np.append(High,float(klines[index][2]))
-    #  低値
-    Low = np.append(Low,float(klines[index][3]))
-    #  終値
-    Close = np.append(Close,float(klines[index][4]))
-    #  時刻
-    delta = -1 * 5 * count
-    time = np.append(time, (Now + timedelta(minutes=(delta))))
-    
-    
-    count += 1
-    
 #  時刻反転
 Ttime = time[::-1]
 
@@ -170,6 +162,7 @@ print("time of transactions: ")
 print(trade_time)
 print("-----profit-----")
 print(str(vStockBTC-1.0)+"BTC")
+
 
 
 ###  チャート描画
