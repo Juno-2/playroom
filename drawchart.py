@@ -24,17 +24,26 @@ def Boll(center,upper,lower):
     ax.plot(upper,color='#ff1493')
     ax.plot(lower,color='#ff1493')
 
+
+##  グラフタイトル
 def title(Title):
     plt.title(Title)
 
+##  グリッド表示
 def grid():
     ax.grid()
 
+##  x軸調整
 def autofmtX():
     fig.autofmt_xdate()
+
+##  単純プロット(test)
+def plot(data,form,Color):
+    ax.plot(data,form,color=Color)
+    #print("plot")
+
+    
 
 def show():
     plt.show()
 
-
-    

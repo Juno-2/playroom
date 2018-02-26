@@ -14,7 +14,6 @@ import drawchart as dc
 from datetime import datetime,timedelta
 #　取得間隔モジュール
 from Interval import *
-
 #  データ取得
 import getData as gd
 #  BTCペア
@@ -31,22 +30,18 @@ Low = np.array([])   # 低値
 Close = np.array([]) # 終値
 Candle = [Open,High,Low,Close] #ろうそく足
 
-
+#  時刻
 time = np.array([])
-
-#  現在時刻取得
-#Now = datetime.now().strftime("%m/%d %H:%M:%S")
-
-time = np.array([])
-count = 0
-delta = 0
-
+     
 #  テクニカル
 sma7 = np.array([])
 sma25 = np.array([])
 boll = np.array([])
 upper_band = np.array([])
 lower_band = np.array([])
+
+#  現在時刻取得
+#Now = datetime.now().strftime("%m/%d %H:%M:%S")
 
 #  データ取得
 gd.Klines(Candle,time,bt.eth,fiveMin,"2 day ago UTC")
@@ -55,6 +50,9 @@ Open = np.append(Open,Candle[0])
 High = np.append(High,Candle[1])
 Low = np.append(Low,Candle[2])
 Close = np.append(Close,Candle[3])
+
+#  test
+print(time)
 
 #  時刻反転
 Ttime = time[::-1]
@@ -90,9 +88,10 @@ up_flag = 0
 under_flag = 0
 bid = 0.0  
 ask = 0.0
-fee = 0.0
+all_fee = 0.0
+trans_fee = 0.0
 trade = 0
-trade_time = np.array([])
+trade_rate = np.array([])
 
 
 ##  トレードアルゴ
@@ -102,7 +101,9 @@ for index,item in enumerate(upper_band):
     if High[index] >= upper_band[index]:
         print("upper boll touch! time: "+str(index))
         up_flag = 1
-
+        #  time update
+        trade_rate = np.append(trade_rate,np.nan)
+          
     elif up_flag == 1 and High[index] <= upper_band[index]:
         print("go down! sell! time: "+str(index))
         up_flag = 0
@@ -110,16 +111,23 @@ for index,item in enumerate(upper_band):
             bid = (High[index] + Low[index])
         else:
             bid = (High[index+1] + Low[index+1]) / 2
-        
+        #   time update
         if vStockETH > 0.0:
             vStockBTC += vStockETH * bid
-            fee += vStockBTC * 0.001
+            trans_fee = vStockBTC * 0.001
+            vStockBTC -= trans_fee
+            #all_fee += trans_fee
             vStockETH = 0.0
             trade += 1
-            trade_time = np.append(trade_time,index)
+            trade_rate = np.append(trade_rate,bid)
+        else:
+            trade_rate = np.append(trade_rate,np.nan)
+            
     elif Low[index] <= lower_band[index]:
         print("under boll touch! time: "+str(index))
         under_flag = 1
+        #  time update
+        trade_rate = np.append(trade_rate,np.nan)
 
     elif under_flag == 1 and Low[index] >=lower_band[index]:
         print("go up! buy! time: "+str(index))
@@ -128,49 +136,67 @@ for index,item in enumerate(upper_band):
             ask = (High[index] + Low[index])
         elif index < 575:
             ask = (High[index+1] + Low[index+1]) / 2
+        #   time update    
         if vStockBTC > 0.0 and index == 575:
             #vStockBTC -= -1 * lot
             print("No buy")
+            trade_rate = np.append(trade_rate,np.nan)
         elif vStockBTC > 0.0:
             vStockETH += vStockBTC / ask
-            fee += vStockBTC * 0.001
+            trans_fee = vStockETH * 0.001
+            vStockETH -= trans_fee
+            #all_fee += trans_fee
             vStockBTC = 0.0
             trade += 1
-            trade_time = np.append(trade_time,index)
+            trade_rate = np.append(trade_rate,ask)
+        else:
+            trade_rate = np.append(trade_rate,np.nan)
 
+    
+    #   time update
     elif index == 575:
         print("back to BTC")
         vStockBTC += vStockETH * bid
-        fee += vStockBTC * 0.001
+        trans_fee = vStockBTC * 0.001
+        vStockBTC -= trans_fee
+        #all_fee += trans_fee
         vStockETH = 0.0
         trade += 1
-        trade_time = np.append(trade_time,index)
+        trade_rate = np.append(trade_rate,bid)
 
 
-    #else:
-    #    trade_time = np.append(trade_time,0)
+    else:
+        trade_rate = np.append(trade_rate,np.nan)
 
 ###  result表示      
 print("-----result-----")
 print("first asset: 1.0BTC ")
 print("final BTC: "+str(vStockBTC))
 print("final ETH: "+str(vStockETH))
-print("transaction fee: "+str(fee)+"BTC")
+#print("transaction fee: "+str(fee)+"BTC")
 
 print("num of transactions: "+str(trade))
 print("time of transactions: ")
-print(trade_time)
+#print(trade_time)
 print("-----profit-----")
 print(str(vStockBTC-1.0)+"BTC")
 
+print(Ttime)
 
+
+####  test
+
+
+
+
+####
 
 ###  チャート描画
 #    ローソク描画
 dc.ohlc(Open,High,Low,Close)
 #    単純移動平均(7,25)
-dc.sma(sma7,'#4682b4')
-dc.sma(sma25,'#ffa500')
+#dc.sma(sma7,'#4682b4')
+#dc.sma(sma25,'#ffa500')
 #    ボリンジャーバンド
 dc.Boll(boll,upper_band,lower_band)
 #    グリッド表示
@@ -179,12 +205,12 @@ dc.grid()
 dc.title('ETH/BTC')
 #    x軸の調整
 dc.autofmtX()
-#    図表示
-dc.show()
 
 #  エントリーポイント描画
-#ax.plot(trade_time,"ro",color="#ffff00")
+dc.plot(trade_rate,"ro",'#ffff00')
 
 #  日付作成
 #ax.set_xlim(Ttime[0],Ttime[95])
 
+#    図表示
+dc.show()

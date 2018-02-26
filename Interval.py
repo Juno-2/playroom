@@ -6,8 +6,8 @@ from binance.client import Client
 oneMin = Client.KLINE_INTERVAL_1MINUTE
 threeMin = Client.KLINE_INTERVAL_3MINUTE
 fiveMin = Client.KLINE_INTERVAL_5MINUTE
-FifteenMin = Client.KLINE_INTERVAL_15MINUTE
-ThirtyMin = Client.KLINE_INTERVAL_30MINUTE
+fifteenMin = Client.KLINE_INTERVAL_15MINUTE
+thirtyMin = Client.KLINE_INTERVAL_30MINUTE
 oneHour = Client.KLINE_INTERVAL_1HOUR
 twoHour = Client.KLINE_INTERVAL_2HOUR
 fourHour = Client.KLINE_INTERVAL_4HOUR

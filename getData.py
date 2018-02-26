@@ -14,7 +14,9 @@ client = Client(api_key,api_secret)
 
 def Klines(candle,Time,symbol,interval,period):
     Now = datetime.now()
+    time = np.array([])
     count = 0
+    delta = 0
     klines = client.get_historical_klines(symbol,interval,period)
     for index,item in enumerate(klines):
         #  始値
@@ -27,8 +29,9 @@ def Klines(candle,Time,symbol,interval,period):
         candle[3] = np.append(candle[3],float(klines[index][4]))
         #  時刻
         delta = -1 * 5 * count
-        Time = np.append(Time, (Now + timedelta(minutes=(delta))))
+        time = np.append(time, (Now + timedelta(minutes=(delta))))
 
         count += 1
-
+    Time = np.append(Time,time)
+    #print(Time)
 
