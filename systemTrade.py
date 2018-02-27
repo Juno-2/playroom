@@ -3,7 +3,7 @@
 
 import numpy as np
 
-
+### 初期化
 def sysInit():
 
     ##　初期アセット
@@ -21,13 +21,15 @@ def sysInit():
     trade_rate = np.array([]) #取引レート,エントリーポイント
     print("ready")
 
+
 ### アルゴリズム
 
 # @param:   引数
-#    Candle: ローソク足データ [始値,高値,低値,終値] 
-#    Technical: テクニカル指標 [移動平均(7),移動平均(25),ボリンジャーバンド.真ん中(21),ボリンジャーバンド.上(21),ボリンジャーバンド.下(21)]
-#    Time: 時間
-def auto(Candle,Technical,Time):
+#    Candle:    ローソク足データ [始値,高値,低値,終値] 
+#    Technical: テクニカルデータ [移動平均(7),移動平均(25),ボリンジャーバンド.真ん中(21),ボリンジャーバンド.上(21),ボリンジャーバンド.下(21)]
+#    Time:      時間
+#    Result:    結果入れる
+def auto(Candle,Technical,Time,Result):
     #sysInit()
     vStockBTC = 1.0  #BTC
     vStockETH = 0.0  #ETH
@@ -51,7 +53,7 @@ def auto(Candle,Technical,Time):
     upper_band = Technical[3]
     lower_band = Technical[4]
 
-
+    #print(Open)
     #### system trade
     for index, item in enumerate(upper_band):
         if High[index] >= upper_band[index]:
@@ -124,7 +126,7 @@ def auto(Candle,Technical,Time):
             trade_rate = np.append(trade_rate,np.nan)
 
 
-    ##### result
+    ##### 結果表示
     print("-----result-----")
     print("first asset: 1.0BTC ")
     print("final BTC: "+str(vStockBTC))
@@ -136,5 +138,5 @@ def auto(Candle,Technical,Time):
     #print(trade_time)
     print("-----profit-----")
     print(str(vStockBTC-1.0)+"BTC")
-
+    Result[0] = np.append(Result[0],trade_rate)
 
