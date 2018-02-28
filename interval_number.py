@@ -16,7 +16,7 @@ def toNum(interval):
 #    引数(取得間隔(ref:Interval.py)
 #    マッチした位置を返す(0:Min,1:Hour,2:Day,3:Week,4:Month)
 def  toFlag(Interval):
-    print(Interval)
+    #print(Interval)
     time = []
     time.append(re.search(r'[0-9]+m',Interval))
     time.append(re.search(r'[0-9]+h',Interval))
@@ -24,7 +24,7 @@ def  toFlag(Interval):
     time.append(re.search(r'[0-9]+w',Interval))
     time.append(re.search(r'[0-9]+M',Interval))
     
-    print(time)
+    #print(time)
     for index,item in enumerate(time):
         if item != None:
             return int(index)

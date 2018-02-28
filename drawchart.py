@@ -1,6 +1,6 @@
 ###  drawchart.py
 ###  描画モジュール
-
+import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib.finance as mpf
 
@@ -31,6 +31,11 @@ def Title(Title):
 def Grid():
     ax.grid()
 
+##  日付表示
+def Set_xlabels(DataFrame):
+    ax.set_xticklabels([(DataFrame.index[int(x)].strftime("%m-%d %H:%M:%S") if x < DataFrame.shape[0] else x) for x in ax.get_xticks()], rotation=30)
+    #ax.set_xlim([0,DataFrame.shape[0]])
+
 ##  x軸調整
 def AutofmtX():
     fig.autofmt_xdate()
@@ -47,8 +52,10 @@ def Show():
 
 ##  描画
 def Draw(Candle,Technical,Result,Symbol,Indicator):
+    #  データフレーム作成
+    df = pd.DataFrame({'Open':Candle[0], 'High':Candle[1], 'Low':Candle[2], 'Close':Candle[3]}, index = Candle[4])
     #  ローソク描画
-    Ohlc(Candle[0],Candle[1],Candle[2],Candle[3])
+    Ohlc(df['Open'],df['High'],df['Low'],df['Close'])                                                
     #　テクニカル描画
     if Indicator == 'Sma':
         Sma(Technical[0],'#4682b4')
@@ -59,15 +66,14 @@ def Draw(Candle,Technical,Result,Symbol,Indicator):
         print("no indicator")
     #  タイトル描画
     Title(Symbol)
+    #  日付表示
+    Set_xlabels(df)
     #  グリッド表示
     Grid()
     #  x軸調整
     AutofmtX()
     #  エントリーポイント描画
     Plot(Result[0],"ro",'#ffff00')
-    #  日付作成
-    #ax.set_xlim(Ttime[0],Time[95])
-
     #  図表示
     Show()
 

@@ -29,11 +29,9 @@ Open = np.array([])  # 始値
 High = np.array([])  # 高値
 Low = np.array([])   # 低値
 Close = np.array([]) # 終値
-Candle = [Open,High,Low,Close] #ろうそく足
+Time = np.array([])  # 時刻
+Candle = [Open,High,Low,Close,Time] #ろうそく足
 
-#  時刻
-time = []
-     
 #  テクニカル
 sma7 = np.array([])
 sma25 = np.array([])
@@ -43,9 +41,9 @@ lower_band = np.array([])
 Technical = [sma7,sma25,boll,upper_band,lower_band]
 
 #  自動取引結果
-entryPoint = np.array([])
+EntryPoint = np.array([])
 
-result = [entryPoint]
+Result = [EntryPoint]
 ###
 
 
@@ -54,12 +52,12 @@ result = [entryPoint]
 
 ###  データ取得
 #    引数(ローソク足,時刻,通貨ペア(ref:Symbol~~.py),取得間隔(ref:Interval.py),取得期間(ref:後で作る)
-gd.Klines(Candle,time,bt.eth,m5,"2 day ago UTC")
+gd.Klines(Candle,bt.eth,m5,"2 day ago UTC")
 ###
 
 ###  test OK
 #print("----main---")
-#print(time)
+#print(Candle[4])
 ###  
 
 ###  テクニカルデータ生成
@@ -68,20 +66,19 @@ ta.TechAnalytic(Candle,Technical)
 ###
 
 ###  自動取引
-#    引数(ローソク足,テクニカルデータ,時刻データ)
-st.auto(Candle,Technical,time,result)
+#    引数(ローソク足,テクニカルデータ,結果用配列)
+st.auto(Candle,Technical,Result)
 ###
 
 
 ####  test
 
-#print(result)
 ####
 
 
 ###  描画
-#    引数(ローソク足,テクニカルデータ,チャートタイトル(通貨ペア),インジケータ(Sma,Boll))
-dc.Draw(Candle,Technical,result,'ETH/BTC','Sma')
+#    引数(ローソク足,テクニカルデータ,自動取引結果,チャートタイトル(通貨ペア),インジケータ(Sma,Boll))
+dc.Draw(Candle,Technical,Result,'ETH/BTC','Sma')
 ###
 
 

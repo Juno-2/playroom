@@ -24,10 +24,9 @@ client = Client(api_key,api_secret)
 #     Symbol:   通貨ペア
 #     Interval: 取得間隔
 #     Period:   取得期間
-def Klines(Candle,Time,Symbol,Interval,Period):
+def Klines(Candle,Symbol,Interval,Period):
     Now = datetime.now()
     times = np.array([])
-    tim = []
     count = 0
     interval = inum.toNum(Interval)
     timeflag = inum.toFlag(Interval)
@@ -58,7 +57,8 @@ def Klines(Candle,Time,Symbol,Interval,Period):
             print("月減算未実装:python-dateutil")
             
         count += 1
-    Time.append(times[::-1])
+    #Time.append(times[::-1])
+    Candle[4] = np.append(Candle[4],times[::-1])
     #print("in getData")
-    #print(Time)
+    #print(Candle[4])
 

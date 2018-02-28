@@ -25,11 +25,10 @@ def sysInit():
 ### アルゴリズム
 
 # @param:   引数
-#    Candle:    ローソク足データ [始値,高値,低値,終値] 
+#    Candle:    ローソク足データ [始値,高値,低値,終値,時刻] 
 #    Technical: テクニカルデータ [移動平均(7),移動平均(25),ボリンジャーバンド.真ん中(21),ボリンジャーバンド.上(21),ボリンジャーバンド.下(21)]
-#    Time:      時間
 #    Result:    結果入れる
-def auto(Candle,Technical,Time,Result):
+def auto(Candle,Technical,Result):
     #sysInit()
     vStockBTC = 1.0  #BTC
     vStockETH = 0.0  #ETH
