@@ -59,7 +59,7 @@ gd.Klines(Candle,bt.eth,m5,"2 day ago UTC")
 #print("----main---")
 #print(Candle[4])
 ###  
-##
+
 ###  テクニカルデータ生成
 #    引数(ローソク足,テクニカルデータ)
 ta.TechAnalytic(Candle,Technical)
