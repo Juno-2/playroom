@@ -1,5 +1,6 @@
 ###  drawchart.py
 ###  描画モジュール
+import re
 import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib.finance as mpf
@@ -25,7 +26,15 @@ def Boll(Center,Upper,Lower):
 
 ##  グラフタイトル
 def Title(Title):
-    plt.title(Title)
+    # /の挿入位置取得
+    slash = re.search(r'BTC$',Title)
+    if slash == None:
+        slash = re.search(r'ETH$',Title)
+    if slash == None:
+        slash = re.search(r'USDT$',Title)
+    # /加えて整形
+    Titles = Title[:slash.start()] + '/' + Title[slash.start():]
+    plt.title(Titles)
 
 ##  グリッド表示
 def Grid():
