@@ -42,8 +42,10 @@ def Klines(Candle,Symbol,Interval,Period):
         Candle[2] = np.append(Candle[2],float(klines[index][3]))
         #  終値
         Candle[3] = np.append(Candle[3],float(klines[index][4]))
+        #  出来高
+        Candle[5] = np.append(Candle[5],float(klines[index][5]))
         #  時刻
-        delta = -1 * interval * count
+        delta = -1 * interval * count                              
         if timeflag == 0:
             times = np.append(times, (Now + timedelta(minutes=(delta))))
         elif timeflag == 1:
@@ -60,5 +62,5 @@ def Klines(Candle,Symbol,Interval,Period):
     #Time.append(times[::-1])
     Candle[4] = np.append(Candle[4],times[::-1])
     #print("in getData")
-    #print(Candle[4])
+    #print(Candle[5])
 

@@ -20,6 +20,7 @@ def AddIndex():
 #     index:   配列位置指定
 def AddData(Tech,addData,index):
     Tech[index] = np.append(Tech[index],addData)    
+    AddIndex()
 
 ###　単純移動平均線
 #      
@@ -29,7 +30,7 @@ def AddData(Tech,addData,index):
 def Sma(Tech,index,Close,Window):
     sma = pd.Series(Close).rolling(window=Window).mean()
     AddData(Tech,sma,index)
-    AddIndex()
+    #AddIndex()
 
 ###  ボリンジャーバンド
 #
@@ -45,6 +46,24 @@ def Boll(Tech,Index,Close,Window):
     AddData(Tech,boll,Index)
     AddData(Tech,upper_band,Index+1)
     AddData(Tech,lower_band,Index+2)
+
+###  MACD
+#
+#
+#
+#
+def Macd(Tech,Index,Close,Short,Long,Signal):
+    emaShort = pd.Series(Close).ewm(span=Short).mean()
+    emaLong = pd.Series(Close).ewm(span=Long).mean()
+    macd = pd.Series(emaShort-emaLong)
+    emaSignal = pd.Series(macd).ewm(span=Signal).mean()
+    histgram = pd.Series(macd-emaSignal)
+    AddData(Tech,emaShort,Index)
+    AddData(Tech,emaLong,Index+1)
+    AddData(Tech,emaSignal,Index+2)
+    AddData(Tech,macd,Index+3)
+    AddData(Tech,histgram,Index+4)
+
 
 ###  テクニカル分析全般
 #
@@ -65,4 +84,9 @@ def TechAnalytic(Candle,Tech):
     Sma(Tech,tIndex,Close,25)
     #  ボリンジャー
     Boll(Tech,tIndex,Close,21)
-    #print(Tech)
+    #print(tIndex)
+    #  MACD
+    Macd(Tech,tIndex,Close,12,26,9)
+    #print(Tech[4])
+    #print('-----macd-----')
+    #print(Tech[9])
